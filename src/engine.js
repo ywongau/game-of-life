@@ -13,7 +13,7 @@ const neighbours = [
   [1, 1],
 ];
 
-const getNeighbours = (x, y, world) =>
+const getNumberOfNeighbours = (x, y, world) =>
   neighbours.reduce(
     (total, [dx, dy]) => total + count(x + dx, y + dy, world),
     0
@@ -22,9 +22,7 @@ const getNeighbours = (x, y, world) =>
 export default (world) =>
   world.map((row, y) =>
     row.map((alive, x) => {
-      const numberOfLiveNeighbors = getNeighbours(x, y, world);
-      return (
-        numberOfLiveNeighbors === 3 || (alive && numberOfLiveNeighbors === 2)
-      );
+      const numberOfNeighbors = getNumberOfNeighbours(x, y, world);
+      return numberOfNeighbors === 3 || (alive && numberOfNeighbors === 2);
     })
   );
