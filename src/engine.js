@@ -1,23 +1,32 @@
-const getNumberOfNeighbours = (x, y, world) => {
-  const countCell = (x1, y1) => (world[y1 + 1]?.[x1] ? 1 : 0);
-  return (
-    countCell(y + 1, x) +
-    countCell(y + 1, x + 1) +
-    countCell(y, x + 1) +
-    countCell(y - 1, x) +
-    countCell(y - 1, x - 1) +
-    countCell(y, x - 1) +
-    countCell(y + 1, x - 1) +
-    countCell(y - 1, x + 1)
+const getItem = (xs, i) => xs[(xs.length + i) % xs.length];
+
+export const count = (x, y, world) => (getItem(getItem(world, y), x) ? 1 : 0);
+
+const neighbours = [
+  [-1, -1],
+  [0, -1],
+  [1, -1],
+  [-1, 0],
+  [1, 0],
+  [-1, 1],
+  [0, 1],
+  [1, 1],
+];
+
+const getNeighbours = (x, y, world) =>
+  neighbours.reduce(
+    (total, [dx, dy]) => total + count(x + dx, y + dy, world),
+    0
   );
-};
-export const Engine = (width, height) => (world) =>
+
+const live = true;
+
+export default (world) =>
   world.map((row, y) =>
-    row.map((cell, x) => {
-      if (cell) {
-        const numberOfNeighbours = getNumberOfNeighbours(x, y, world);
-        return numberOfNeighbours === 2 || numberOfNeighbours === 3;
-      }
-      return false;
+    row.map((alive, x) => {
+      const numberOfLiveNeighbors = getNeighbours(x, y, world);
+      return numberOfLiveNeighbors === 3
+        ? live
+        : alive && numberOfLiveNeighbors === 2;
     })
   );
