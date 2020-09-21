@@ -19,14 +19,12 @@ const getNeighbours = (x, y, world) =>
     0
   );
 
-const live = true;
-
 export default (world) =>
   world.map((row, y) =>
     row.map((alive, x) => {
       const numberOfLiveNeighbors = getNeighbours(x, y, world);
-      return numberOfLiveNeighbors === 3
-        ? live
-        : alive && numberOfLiveNeighbors === 2;
+      return (
+        numberOfLiveNeighbors === 3 || (alive && numberOfLiveNeighbors === 2)
+      );
     })
   );
